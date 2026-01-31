@@ -53,16 +53,42 @@ if uploaded_file is not None:
             top5, percent_df = helper.fetch_busy_users(df)
             fig, ax = plt.subplots()
             
-            col1, col2 = st.columns(2)
+            col1, col2 = st.columns([2.5,1.5])
 
             with col1:
                 ax.bar(top5.index, top5.values, color='green')
                 for i, value in enumerate(top5.values):
                     ax.text(i, value, str(value), ha='center', va='bottom')
 
+                plt.ylabel("Number of messages")
                 plt.xticks(rotation='vertical')
                 st.pyplot(fig)
             
             with col2:
                 st.dataframe(percent_df)
+        
+        #Word Cloud
+        st.title("Word Cloud")
+        df_wc = helper.create_wordCloud(selected_user=selected_user,df=df)
+        fig, ax = plt.subplots()
+        plt.imshow(df_wc)
+        st.pyplot(fig)
+
+        # most common words
+        st.title("Most Used words")
+
+        most_common_df = helper.most_commonWords(selected_user,df)
+
+        fig , ax = plt.subplots()
+
+        ax.bar(most_common_df[0], most_common_df[1])
+
+        for i, value in enumerate(most_common_df[1]):
+            ax.text(i, value, str(value), ha='center', va='bottom')
+
+        plt.ylabel("Number of Words")
+        plt.xticks(rotation='vertical')
+        st.pyplot(fig)
+        
+
             

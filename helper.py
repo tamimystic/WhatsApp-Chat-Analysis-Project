@@ -1,10 +1,13 @@
+import pandas as pd
+from wordcloud import WordCloud
+from collections import Counter
 from urlextract import URLExtract
+
 extractor = URLExtract()
 
 def fetch_stats(selected_user,df):
 
     if selected_user != 'Overall':
-
         df = df[df['user'] == selected_user]
 
     # fetch number of messages
@@ -30,5 +33,52 @@ def fetch_busy_users(df):
     x = df['user'].value_counts().head()
     y = round((df['user'].value_counts()/df.shape[0])*100,2).reset_index().rename(columns={'user': 'name', 'count': 'percent'})
     return x,y
+
+def create_wordCloud(selected_user,df):
+
+    f = open('stopwords.txt','r')
+    banglish_stopwords = f.read()
+
+    if selected_user != 'Overall':
+        df = df[df['user'] == selected_user]
+
+    temp = df[df['user'] != 'group_notification']
+    temp = temp[temp['message'] != '<Media omitted>\n']
+
+    def remove_stopWords(message):
+        y = []
+        for word in message.lower().split():
+            if word in banglish_stopwords:
+                y.append(word)
+        return " ".join(y)
+
+    wc = WordCloud(width=500, height=500, min_font_size=10, background_color='white')
+
+    temp['message'] = temp['message'].apply(remove_stopWords)
+    
+    df_wc = wc.generate(temp['message'].str.cat(sep=" "))
+
+    return df_wc
+
+def most_commonWords(selected_user, df):
+
+    f = open('stopwords.txt','r')
+    banglish_stopwords = f.read()
+
+    if selected_user != 'Overall':
+        df = df[df['user'] == selected_user]
+
+    temp = df[df['user'] != 'group_notification']
+    temp = temp[temp['message'] != '<Media omitted>\n']
+
+    words = []
+
+    for message in temp['message']:
+        for word in message.lower().split():
+            if word not in banglish_stopwords:
+                words.append(word)
+
+    most_common_df = pd.DataFrame(Counter(words).most_common(20))
+    return most_common_df
 
         

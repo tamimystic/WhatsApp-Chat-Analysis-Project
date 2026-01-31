@@ -1,3 +1,16 @@
+# WhatsApp exported chat files (personal data)
+# block ALL txt inside data_process
+data_process/*.txt
+data_process/**/*.txt
+
+
+# Streamlit runtime/cache
+.streamlit/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -206,13 +219,4 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# WhatsApp exported chat files (personal data)
-data_process/*.txt
-
-# Streamlit runtime/cache
-.streamlit/
-
-# OS junk files
-.DS_Store
-Thumbs.db
 
