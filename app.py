@@ -89,6 +89,20 @@ if uploaded_file is not None:
         plt.ylabel("Number of Words")
         plt.xticks(rotation='vertical')
         st.pyplot(fig)
+
+        #Emoji analysis
+        emoji_df = helper.emoji_helper(selected_user,df)
+
+        st.title("Most Common Emoji")
+
+        col1, col2 = st.columns([3,2])
+
+        with col1:
+            st.dataframe(emoji_df)
+        with col2:
+            fig, ax = plt.subplots()
+            ax.pie(emoji_df[1],labels=emoji_df[0],autopct="%0.2f", )
+            st.pyplot(fig)
         
 
             
