@@ -85,7 +85,7 @@ banglish_stopwords = [
 
     # --- Slang/Informal/Chat ---
     "ok", "okay", "hmmm", "hmm", "hm", "lol", "haha", "hahaha", "wait", "hi", 
-    "hello", "hey", "ey", "oy", "shala", "sala", "hoga", "mara", "khawa",
+    "hello", "hey", "ey", "oy", "shala", "sala", "hoga", "mara", "khawa", "message", "deleted",
 
     # --- English Standard (NLTK + Scikit) ---
     "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", 

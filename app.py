@@ -14,7 +14,7 @@ if uploaded_file is not None:
 
     df = preprocessor.preprocess(data)
 
-    st.dataframe(df)
+    # st.dataframe(df)
 
     # Fetch unique users
     user_list = df['user'].unique().tolist()
@@ -28,6 +28,7 @@ if uploaded_file is not None:
         
         # Stats Area
         num_messages, words, numOf_media_messages, numOf_links= helper.fetch_stats(selected_user,df)
+        st.title("Top Statistics:")
 
         col1, col2, col3, col4 = st.columns(4)
 
@@ -47,9 +48,40 @@ if uploaded_file is not None:
             st.header("Total Link Shared")
             st.title(numOf_links)
 
+        # st.title("-----------------------------------------------")
+        
+        # Monthly Timeline
+        st.title("Message did by Month and Year:")
+        monthly_timeline = helper.monthly_timeline(selected_user,df)
+
+        fig, ax = plt.subplots()
+        ax.bar(monthly_timeline['time'],monthly_timeline['message'],color='steelblue')
+        for i, value in enumerate(monthly_timeline['message']):
+            ax.text(i, value, str(value), ha='center', va='bottom', fontsize=9)
+
+        ax.set_xlabel("Timeline (Month-Year)")
+        ax.set_ylabel("Number of Messages")
+        ax.set_title("Message Timeline")
+        plt.xticks(rotation=90)
+        st.pyplot(fig)
+
+        # Daily Timeline
+        st.title("Message did by Daily:")
+        daily_timeline = helper.daily_timeline(selected_user,df)
+
+        fig, ax = plt.subplots()
+        ax.plot(daily_timeline['only_date'],daily_timeline['message'],color='green')
+
+        ax.set_xlabel("Timeline (Daily)")
+        ax.set_ylabel("Number of Messages")
+        ax.set_title("Message Timeline")
+        plt.xticks(rotation=90)
+        st.pyplot(fig)
+
+
         # Finding the busiest user in the grooup(Group level)
         if selected_user == 'Overall':
-            st.title('Most Busy Users')
+            st.title('Most Busy Users:')
             top5, percent_df = helper.fetch_busy_users(df)
             fig, ax = plt.subplots()
             
@@ -68,14 +100,14 @@ if uploaded_file is not None:
                 st.dataframe(percent_df)
         
         #Word Cloud
-        st.title("Word Cloud")
+        st.title("Word Cloud:")
         df_wc = helper.create_wordCloud(selected_user=selected_user,df=df)
         fig, ax = plt.subplots()
         plt.imshow(df_wc)
         st.pyplot(fig)
 
         # most common words
-        st.title("Most Used words")
+        st.title("Most Used words:")
 
         most_common_df = helper.most_commonWords(selected_user,df)
 
@@ -93,7 +125,7 @@ if uploaded_file is not None:
         #Emoji analysis
         emoji_df = helper.emoji_helper(selected_user,df)
 
-        st.title("Most Common Emoji")
+        st.title("Most Common Emoji:")
 
         col1, col2 = st.columns([3,2])
 
